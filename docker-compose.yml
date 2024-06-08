@@ -1,0 +1,45 @@
+#current version for docker compose
+version: "2.27.0"
+ #containers will be run
+services:
+      mysql-database:
+     #name of image from docker hub 
+       image: mysql 
+       #container will be restart if closed
+       restart: always
+       #its vairibles for data base its like user , pass , root pass  and so on  
+       environment: 
+          MYSQL-ROOT-PASSWORD: 1234
+          MYSQL-DATABASE: wp_dp
+          MYSQL_USER: wp_user
+          MYSQL_PASSWORD: 1234
+          #bind mounting and will mount our image in this path due to if there is any update will reflect on spot 
+      volumes:
+        - mysql:/var/lib/mysql
+        # name of second container wordpress
+    wordpress:
+    #dpendanices for wordpress like will not run if daatbase not run
+      depend_on:
+        - mysql-database
+      #name of image which exist at docker-hub  
+      image: wordpress:latest
+      #will resatrt if container closed or stopped
+      restart: always
+      #port number for wordpress
+      ports:
+         -  "8000-80"
+       #its vairibles for data base its like user , pass , root pass , its database and so on 
+      environment:
+         WORDPRESS_DB_HOST: mysql_database:3306
+         WORDPRESS_DB_USER: wp_user
+         WORDPRESS_BD_PASSWORD: 1234
+         WORDPRESS_DB_PASSWORD: 1234
+         WORDPRESS_DB_NAME: wp_dp
+      volumes:
+         ["./:/var/www/html"]
+  volumes:
+    mysql: {}
+        
+
+
+             
